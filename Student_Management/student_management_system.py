@@ -21,15 +21,17 @@ students = []
 #    students.append(student)
 #print(students)
 
+import ast
 
 students = []
 
-print("/n Welcome to Student Management System");
+print("\n Welcome to Student Management System");
 print("1.Add Students")
 print("2. View Students")
 print("3. Search students")
 print("4. Delete Student")
-print("5. Exit")
+print("5. Update Marks")
+print("6. Exit")
 
 while(True):
     choice = input("Enter choice : ")
@@ -47,7 +49,14 @@ while(True):
             print("Student Added Successfully!")
 
     elif choice == "2":
-        print(students)
+        # print(students)
+        file = open("student.txt" , "r")
+        read = file.read()
+        data = ast.literal_eval(read) # Previously we read data as stringwhich are stored in student.txt file , BUT we want to read the real data , so we import a module 'ast' and here we use a function called literal_eval() which converts string data into REAL PYTHON DATA .
+        print(data)
+        print(type(data))
+        file.close()
+        
 
 
     elif choice == "3":
@@ -61,6 +70,7 @@ while(True):
                 print("Name :" , student["name"])
                 print("Marks : " , student["marks"])
                 flag = True
+                break
         
         if flag == False:
              print("Student not found !")
@@ -73,7 +83,29 @@ while(True):
             if delete_student == student["name"]:
                 students.remove(student)
                 print("student deleted successfully!")
+                break
+
+    
+    elif choice == "5":
+        updated_name = input("Enter name whose marks to be updated : ")
+
+        found = False
+
+        for student in students:
+            if student["name"] == updated_name:
+                new_marks =  int(input("Enter Marks to be updated : "))
+                student["marks"] = new_marks
+                print(f'{student["name"]} Marks updated Successfully!')
+                found = True
+                break
+
+        if found == False:
+            print("Student not found")
 
     else:
         print("Exit....")
         break
+
+file = open("student.txt" , "w")
+file.write(str(students))
+file.close()
